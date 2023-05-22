@@ -6,6 +6,9 @@ Another personal project of mine. Thought that making a hybrid RPG and slot mach
 ## **To Do**
 
 - Implement random enemies and looping through them.
+- Implement escape mechanic.
+- Implement XP and leveling up.
+- Implement high score system.
 - Add a chance for random events.
 - UI work.. maybe add in a graphical slot machine where the reels are.
 - Needs extensive balancing and playtesting.
