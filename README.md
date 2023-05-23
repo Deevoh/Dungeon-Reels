@@ -5,11 +5,8 @@ Another personal project of mine. Thought that making a hybrid RPG and slot mach
 
 ## **To Do**
 
-- Implement random enemies and looping through them.
 - Implement escape mechanic.
 - Implement XP and leveling up.
-- Implement high score system.
-- Fix the scoring check functions so the print statements properly display for singular/plural matches.
-- Fix the armor reduction and scaling as per each enemy attack and armor match.
+- Implement high score system?
 - Add a chance for random events.
 - Needs extensive balancing and playtesting.
