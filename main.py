@@ -97,7 +97,7 @@ def process_spin(result):  # sourcery skip: use-fstring-for-concatenation
         skill_check()
     if sword_matches > 0 and escape_matches == 0 and skill_matches == 0:
         attack_enemy(sword_matches)
-    if enemy_attacks > 0 and escape_matches == 0 and skill_matches == 0 and sword_matches == 0:
+    if enemy_attacks > 0 and escape_matches == 0:
         enemy_attack_player(enemy_attacks)
     charge_modifier = 1
 
