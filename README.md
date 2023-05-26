@@ -5,9 +5,6 @@ Another personal project of mine. Thought that making a hybrid RPG and slot mach
 
 ## **To Do**
 
-- Figure out a way to handle facing a new enemy instead of jumping right into an attack.
-- Implement leveling up.
-- Implement high score system?
 - Add a chance for random events.
 - Add more player interaction.
 - Needs extensive balancing and playtesting.
