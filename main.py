@@ -25,25 +25,25 @@ player = {
 }
 
 level_up_stats = {
-    2: {'experience': 30, 'health': 350, 'attack_power': 3, 'defense': 2},
-    3: {'experience': 60, 'health': 400, 'attack_power': 4, 'defense': 3},
-    4: {'experience': 100, 'health': 450, 'attack_power': 8, 'defense': 4},
-    5: {'experience': 150, 'health': 500, 'attack_power': 10, 'defense': 5},
-    6: {'experience': 210, 'health': 550, 'attack_power': 12, 'defense': 6},
-    7: {'experience': 280, 'health': 600, 'attack_power': 14, 'defense': 7},
-    8: {'experience': 360, 'health': 650, 'attack_power': 16, 'defense': 8},
-    9: {'experience': 450, 'health': 700, 'attack_power': 18, 'defense': 9},
-    10: {'experience': 550, 'health': 750, 'attack_power': 20, 'defense': 10},
-    11: {'experience': 660, 'health': 800, 'attack_power': 22, 'defense': 11},
-    12: {'experience': 780, 'health': 850, 'attack_power': 24, 'defense': 12},
-    13: {'experience': 910, 'health': 900, 'attack_power': 26, 'defense': 13},
-    14: {'experience': 1050, 'health': 950, 'attack_power': 28, 'defense': 14},
-    15: {'experience': 1200, 'health': 1000, 'attack_power': 30, 'defense': 15},
-    16: {'experience': 1360, 'health': 1050, 'attack_power': 32, 'defense': 16},
-    17: {'experience': 1530, 'health': 1100, 'attack_power': 34, 'defense': 17},
-    18: {'experience': 1710, 'health': 1150, 'attack_power': 36, 'defense': 18},
-    19: {'experience': 1900, 'health': 1200, 'attack_power': 38, 'defense': 19},
-    20: {'experience': 2100, 'health': 1250, 'attack_power': 40, 'defense': 20}
+    2: {'experience': 70, 'health': 350, 'attack_power': 3, 'defense': 2},
+    3: {'experience': 150, 'health': 400, 'attack_power': 5, 'defense': 3},
+    4: {'experience': 240, 'health': 450, 'attack_power': 8, 'defense': 4},
+    5: {'experience': 340, 'health': 500, 'attack_power': 10, 'defense': 5},
+    6: {'experience': 450, 'health': 550, 'attack_power': 12, 'defense': 6},
+    7: {'experience': 570, 'health': 600, 'attack_power': 14, 'defense': 7},
+    8: {'experience': 700, 'health': 650, 'attack_power': 16, 'defense': 8},
+    9: {'experience': 840, 'health': 700, 'attack_power': 18, 'defense': 9},
+    10: {'experience': 990, 'health': 750, 'attack_power': 20, 'defense': 10},
+    11: {'experience': 1150, 'health': 800, 'attack_power': 22, 'defense': 11},
+    12: {'experience': 1320, 'health': 850, 'attack_power': 24, 'defense': 12},
+    13: {'experience': 1500, 'health': 900, 'attack_power': 26, 'defense': 13},
+    14: {'experience': 1690, 'health': 950, 'attack_power': 28, 'defense': 14},
+    15: {'experience': 1890, 'health': 1000, 'attack_power': 30, 'defense': 15},
+    16: {'experience': 2100, 'health': 1050, 'attack_power': 32, 'defense': 16},
+    17: {'experience': 2320, 'health': 1100, 'attack_power': 34, 'defense': 17},
+    18: {'experience': 2550, 'health': 1150, 'attack_power': 36, 'defense': 18},
+    19: {'experience': 2790, 'health': 1200, 'attack_power': 38, 'defense': 19},
+    20: {'experience': 3040, 'health': 1250, 'attack_power': 40, 'defense': 20}
 }
 
 
@@ -80,7 +80,7 @@ def spin_reels():
     return result
 
 def process_spin(result):  # sourcery skip: low-code-quality, use-fstring-for-concatenation
-    global charge_modifier, xp
+    global charge_modifier, score, xp
     for row in result:
         print("   ".join(row))
         time.sleep(0.3)
@@ -91,8 +91,8 @@ def process_spin(result):  # sourcery skip: low-code-quality, use-fstring-for-co
     skill_matches = 0
     critical_matches = 0
     sword_matches = 0
-    enemy_attacks = 0
     enemy_critical_attacks = 0
+    enemy_attacks = 0
 
     for col in range(len(result[0])):
         column_symbols = [result[row][col] for row in range(len(result))]
@@ -115,10 +115,29 @@ def process_spin(result):  # sourcery skip: low-code-quality, use-fstring-for-co
             enemy_critical_attacks += 1
         if row.count('💀') >= 2:
             enemy_attacks += 1
+
     print("━═━═━═━═━═━═")
     time.sleep(0.5)
     if charge_modifier > 1:
         print("\n─⊳ Charge active!")
+
+    if escape_matches > 0:
+        score += (escape_matches * 25) + 25
+    if armor_matches > 0:
+        score += (armor_matches * 10) + 15
+    if heart_matches > 0:
+        score += (heart_matches * 25) + 25
+    if skill_matches > 0:
+        score += (skill_matches * 25) + 25
+    if critical_matches > 0:
+        score += (critical_matches * 25) + 25
+    if sword_matches > 0:
+        score += (sword_matches * 10) + 15
+    if enemy_critical_attacks > 0:
+        score += (enemy_critical_attacks * 25) + 25
+    if enemy_attacks > 0:
+        score += (enemy_attacks * 10) + 15
+
     if escape_matches > 0:
         escape_combat()
     if armor_matches > 0 and escape_matches == 0:
@@ -159,7 +178,7 @@ def escape_combat():
 
 def add_armor(armor_matches):
     global player_armor, charge_modifier
-    armor_points = 4
+    armor_points = 5
     total_armor_points = round(armor_points * armor_matches * charge_modifier)
     player_armor += total_armor_points
     if armor_matches == 1:
@@ -183,7 +202,7 @@ def skill_check():
     skill_modifier = 1.85 * charge_modifier
     total_attack_power = round(player_attack_power * skill_modifier)
     print(f"\n{player_name} unleashes a powerful skill attack from matching 3 ➕ symbols in a row.")
-    print(f"{player_name} deals {total_attack_power} damage to the {enemy_name.lower()}, bypassing their defense.")
+    print(f"{player_name} deals {total_attack_power} damage to the {enemy_name.lower()}, bypassing their defenses.")
     enemy_health -= total_attack_power
     if enemy_health <= 0:
         defeated_enemy = True
@@ -334,6 +353,7 @@ def start_game():  # sourcery skip: extract-method, low-code-quality
             enemy_defense = enemy['defense']
             enemy_xp = enemy['xp']
             continue
+
         while not game_over:
             print("\n1. Attack")
             print("2. Charge (2.5x modifier)")
@@ -350,7 +370,8 @@ def start_game():  # sourcery skip: extract-method, low-code-quality
             else:
                 continue
 
-    score = xp + (20 * defeated_enemy_count)
+    score += (xp + (55 * defeated_enemy_count))
+    score += (player_level * 250)
 
     if defeated_enemy_count == 1:
         print("\nYou have defeated 1 enemy.")
