@@ -5,11 +5,9 @@ Another personal project of mine. Thought that making a hybrid RPG and slot mach
 
 ## **To Do**
 
-- Figure out a way to handle facing a new enemy instead of jumping right into an attack.
-- Implement leveling up.
-- Implement high score system?
+- Scale armor and health buffs with player level.
+- Scale enemies with player level.
+- Add in dungeon levels, and a chance for bosses after a certain amount of enemies defeated.
 - Add a chance for random events.
 - Add more player interaction.
 - Needs extensive balancing and playtesting.
-- Scale enemies with player level?
-- Add in dungeon levels, and a chance for bosses?
