@@ -5,8 +5,9 @@ Another personal project of mine. Thought that making a hybrid RPG and slot mach
 
 ## **To Do**
 
+- Scale armor and health buffs with player level.
+- Scale enemies with player level.
+- Add in dungeon levels, and a chance for bosses after a certain amount of enemies defeated.
 - Add a chance for random events.
 - Add more player interaction.
 - Needs extensive balancing and playtesting.
-- Scale enemies with player level?
-- Add in dungeon levels, and a chance for bosses?
