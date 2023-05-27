@@ -65,7 +65,7 @@ def spin_reels():
     return result
 # Process spins and reels
 def process_spin(result):  # sourcery skip: low-code-quality, use-fstring-for-concatenation
-    global charge_modifier, score, player_max_ap, player_ap, enemy_max_health, xp
+    global charge_modifier, score, player_max_ap, player_ap, enemy_max_health, xp, defeated_enemy_count
     for row in result:
         print("   ".join(row))
         time.sleep(0.3)
@@ -105,6 +105,8 @@ def process_spin(result):  # sourcery skip: low-code-quality, use-fstring-for-co
     time.sleep(0.5)
     if charge_modifier > 1:
         print("\n─⊳ Charge active!")
+    if defeated_enemy_count % 10:
+        print("\nBoss battle!")
     # Count all the matches
     if escape_matches > 0:
         score += (escape_matches * 25) + 25
@@ -186,7 +188,7 @@ def add_health(heart_matches):
     global player_health, charge_modifier
     health_bonus = 20
     if player_level > 1:
-        total_health_bonus = round(health_bonus * heart_matches * charge_modifier * (player_level * 0.65))
+        total_health_bonus = round(health_bonus * heart_matches * charge_modifier * (player_level * 0.58))
     else:
         total_health_bonus = round(health_bonus * heart_matches * charge_modifier)
     player_health += total_health_bonus
@@ -295,6 +297,7 @@ def start_game():  # sourcery skip: extract-method, low-code-quality
     defeated_enemy = False
     charge_modifier = 1
     score = 0
+    boss_count = 0
     game_over = False
     early_flee = False
     player_died = False
@@ -339,6 +342,8 @@ def start_game():  # sourcery skip: extract-method, low-code-quality
             print(f"\nGame Over! {player_name} was killed by the {enemy_name.lower()}.")
             break
         elif enemy_health <= 0:
+            if defeated_enemy_count % 10:
+                boss_count += 1
             defeated_enemy_count += 1
             print(f"\nCongratulations! You've defeated the {enemy_name.lower()} and gained {enemy_xp} XP!")
             earn_experience(enemy_xp)
@@ -352,13 +357,13 @@ def start_game():  # sourcery skip: extract-method, low-code-quality
                     break
                 else:
                     continue
-            # New round setup
+            # New round setup and boss check
             defeated_enemy = False
             enemy = select_enemy() if defeated_enemy_count % 10 != 0 else select_boss()
             enemy_name = enemy['name']
             if player_level > 1:
                 enemy_max_health = round(enemy['health'] * (player_level * 0.55))
-                enemy_health = round(enemy['health'] * (player_level * 0.53))
+                enemy_health = round(enemy['health'] * (player_level * 0.55))
                 enemy_attack_power = round(enemy['attack_power'] * (player_level * 0.58))
                 enemy_defense = round(enemy['defense'] * (player_level * 0.55))
                 enemy_xp = round(enemy['xp'] * (player_level * 0.55))
@@ -391,9 +396,11 @@ def start_game():  # sourcery skip: extract-method, low-code-quality
             else:
                 continue
     # Final scoring
-    if defeated_enemy_count > 1:
+    if defeated_enemy_count >= 1:
         score += round((xp + (55 * defeated_enemy_count)))
-        score += round((player_level * 310))
+        score += round((player_level * 300))
+    if boss_count >= 1:
+        score += round(boss_count * 400)
     if early_flee == True:
         score = score / 1.4
     if player_died == True:
@@ -402,11 +409,14 @@ def start_game():  # sourcery skip: extract-method, low-code-quality
     # End game printout
     if defeated_enemy_count == 1:
         print("\nYou have defeated 1 enemy.")
-        print(f"You have gained a total of {xp} XP.")
     else:
         print(f"\nYou have defeated {defeated_enemy_count} enemies.")
-        print(f"You have gained a total of {xp} XP.")
-        print(f"Your final score is {score}.")
+    if boss_count == 1:
+        print("\nYou have defeated 1 boss.")
+    else:
+        print(f"\nYou have defeated {boss_count} bosses.")
+    print(f"You have gained a total of {xp} XP.")
+    print(f"Your final score is {score}.")
     while True:
         choice = input("\nStart a new game? (y/n): ")
         if choice.lower() == 'n':
