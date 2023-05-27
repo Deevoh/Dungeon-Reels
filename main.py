@@ -2,6 +2,7 @@ import random
 import os
 import time
 from art import logo
+from tables import level_up_stats
 from enemylist import enemies, bosses
 
 
@@ -23,28 +24,6 @@ player = {
     'defense': 5,
     'armor': 0,
     'ap': 100
-}
-
-level_up_stats = {
-    2: {'experience': 90, 'health': 350, 'attack_power': 3, 'defense': 2},
-    3: {'experience': 180, 'health': 400, 'attack_power': 5, 'defense': 3},
-    4: {'experience': 280, 'health': 450, 'attack_power': 7, 'defense': 4},
-    5: {'experience': 390, 'health': 500, 'attack_power': 9, 'defense': 5},
-    6: {'experience': 510, 'health': 550, 'attack_power': 11, 'defense': 6},
-    7: {'experience': 640, 'health': 600, 'attack_power': 13, 'defense': 7},
-    8: {'experience': 780, 'health': 650, 'attack_power': 15, 'defense': 8},
-    9: {'experience': 930, 'health': 700, 'attack_power': 17, 'defense': 9},
-    10: {'experience': 1090, 'health': 750, 'attack_power': 19, 'defense': 10},
-    11: {'experience': 1260, 'health': 800, 'attack_power': 21, 'defense': 11},
-    12: {'experience': 1440, 'health': 850, 'attack_power': 23, 'defense': 12},
-    13: {'experience': 1630, 'health': 900, 'attack_power': 25, 'defense': 13},
-    14: {'experience': 1830, 'health': 950, 'attack_power': 27, 'defense': 14},
-    15: {'experience': 2040, 'health': 1000, 'attack_power': 29, 'defense': 15},
-    16: {'experience': 2260, 'health': 1050, 'attack_power': 30, 'defense': 16},
-    17: {'experience': 2490, 'health': 1100, 'attack_power': 32, 'defense': 17},
-    18: {'experience': 2730, 'health': 1150, 'attack_power': 33, 'defense': 18},
-    19: {'experience': 2980, 'health': 1200, 'attack_power': 35, 'defense': 19},
-    20: {'experience': 3240, 'health': 1250, 'attack_power': 36, 'defense': 20}
 }
 
 # Earn XP
@@ -174,7 +153,7 @@ def process_spin(result):  # sourcery skip: low-code-quality, use-fstring-for-co
     player_xp_status = f"Level {player_level} ({xp}/{level_up_stats[player_level + 1]['experience']} XP)"
     enemy_status = f"{enemy_name}'s HP: {max(enemy_health, 0)}/{enemy_max_health}"
     dungeon_rooms = f"Rooms explored: {defeated_enemy_count}"
-    status_length = max(len(player_status), len(player_xp_status), len(enemy_status))
+    status_length = max(len(player_status), len(player_ap_status), len(player_xp_status), len(enemy_status))
     print("\n╔" + "═" * status_length + "╗")
     print("║" + player_status.center(status_length) + "║")
     print("║" + player_ap_status.center(status_length) + "║")
@@ -337,7 +316,7 @@ def start_game():  # sourcery skip: extract-method, low-code-quality
             print("❤️ : 3 in a row or column to buff HEALTH")
             print("🏃: 3 in a column to ESCAPE")
             print("\nSurvive and defeat as many enemies as possible.")
-            print("Every 8 rooms explored will result in a boss fight.")
+            print("Every 10 rooms explored will result in a boss fight.")
             input("\nPress any key to continue..")
             break
         else:
@@ -375,15 +354,16 @@ def start_game():  # sourcery skip: extract-method, low-code-quality
                     continue
             # New round setup
             defeated_enemy = False
-            enemy = select_enemy() if defeated_enemy_count % 8 != 0 else select_boss()
+            enemy = select_enemy() if defeated_enemy_count % 10 != 0 else select_boss()
             enemy_name = enemy['name']
             if player_level > 1:
                 enemy_max_health = round(enemy['health'] * (player_level * 0.55))
-                enemy_health = round(enemy['health'] * (player_level * 0.55))
+                enemy_health = round(enemy['health'] * (player_level * 0.53))
                 enemy_attack_power = round(enemy['attack_power'] * (player_level * 0.58))
-                enemy_defense = round(enemy['defense'] * (player_level * 0.58))
+                enemy_defense = round(enemy['defense'] * (player_level * 0.55))
                 enemy_xp = round(enemy['xp'] * (player_level * 0.55))
             else:
+                enemy_max_health = enemy['health']
                 enemy_health = enemy['health']
                 enemy_attack_power = enemy['attack_power']
                 enemy_defense = enemy['defense']
@@ -411,17 +391,19 @@ def start_game():  # sourcery skip: extract-method, low-code-quality
             else:
                 continue
     # Final scoring
-    score += round((xp + (55 * defeated_enemy_count)))
-    score += round((player_level * 310))
+    if defeated_enemy_count > 1:
+        score += round((xp + (55 * defeated_enemy_count)))
+        score += round((player_level * 310))
     if early_flee == True:
         score = score / 1.4
     if player_died == True:
         score = score / 2
+    score = round(score)
     # End game printout
     if defeated_enemy_count == 1:
         print("\nYou have defeated 1 enemy.")
         print(f"You have gained a total of {xp} XP.")
-    elif defeated_enemy_count > 1:
+    else:
         print(f"\nYou have defeated {defeated_enemy_count} enemies.")
         print(f"You have gained a total of {xp} XP.")
         print(f"Your final score is {score}.")
