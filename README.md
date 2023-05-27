@@ -6,8 +6,7 @@ Another personal project of mine. Thought that making a hybrid RPG and slot mach
 ## **To Do**
 
 - Improve player/enemy status readability.
-- Add option to rest after battle or choose from other options.
-- Add in dungeon levels, and a chance for bosses after a certain amount of enemies defeated.
+- Add option to rest after battle or regain TP or buff armor.
 - Add a chance for random events.
 - Add more player interaction.
 - Needs extensive balancing and playtesting.
