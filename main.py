@@ -26,25 +26,25 @@ player = {
 }
 
 level_up_stats = {
-    2: {'experience': 70, 'health': 350, 'attack_power': 3, 'defense': 2},
-    3: {'experience': 150, 'health': 400, 'attack_power': 5, 'defense': 3},
-    4: {'experience': 240, 'health': 450, 'attack_power': 8, 'defense': 4},
-    5: {'experience': 340, 'health': 500, 'attack_power': 10, 'defense': 5},
-    6: {'experience': 450, 'health': 550, 'attack_power': 12, 'defense': 6},
-    7: {'experience': 570, 'health': 600, 'attack_power': 14, 'defense': 7},
-    8: {'experience': 700, 'health': 650, 'attack_power': 16, 'defense': 8},
-    9: {'experience': 840, 'health': 700, 'attack_power': 18, 'defense': 9},
-    10: {'experience': 990, 'health': 750, 'attack_power': 20, 'defense': 10},
-    11: {'experience': 1150, 'health': 800, 'attack_power': 22, 'defense': 11},
-    12: {'experience': 1320, 'health': 850, 'attack_power': 24, 'defense': 12},
-    13: {'experience': 1500, 'health': 900, 'attack_power': 26, 'defense': 13},
-    14: {'experience': 1690, 'health': 950, 'attack_power': 28, 'defense': 14},
-    15: {'experience': 1890, 'health': 1000, 'attack_power': 30, 'defense': 15},
-    16: {'experience': 2100, 'health': 1050, 'attack_power': 32, 'defense': 16},
-    17: {'experience': 2320, 'health': 1100, 'attack_power': 34, 'defense': 17},
-    18: {'experience': 2550, 'health': 1150, 'attack_power': 36, 'defense': 18},
-    19: {'experience': 2790, 'health': 1200, 'attack_power': 38, 'defense': 19},
-    20: {'experience': 3040, 'health': 1250, 'attack_power': 40, 'defense': 20}
+    2: {'experience': 90, 'health': 350, 'attack_power': 3, 'defense': 2},
+    3: {'experience': 180, 'health': 400, 'attack_power': 5, 'defense': 3},
+    4: {'experience': 280, 'health': 450, 'attack_power': 7, 'defense': 4},
+    5: {'experience': 390, 'health': 500, 'attack_power': 9, 'defense': 5},
+    6: {'experience': 510, 'health': 550, 'attack_power': 11, 'defense': 6},
+    7: {'experience': 640, 'health': 600, 'attack_power': 13, 'defense': 7},
+    8: {'experience': 780, 'health': 650, 'attack_power': 15, 'defense': 8},
+    9: {'experience': 930, 'health': 700, 'attack_power': 17, 'defense': 9},
+    10: {'experience': 1090, 'health': 750, 'attack_power': 19, 'defense': 10},
+    11: {'experience': 1260, 'health': 800, 'attack_power': 21, 'defense': 11},
+    12: {'experience': 1440, 'health': 850, 'attack_power': 23, 'defense': 12},
+    13: {'experience': 1630, 'health': 900, 'attack_power': 25, 'defense': 13},
+    14: {'experience': 1830, 'health': 950, 'attack_power': 27, 'defense': 14},
+    15: {'experience': 2040, 'health': 1000, 'attack_power': 29, 'defense': 15},
+    16: {'experience': 2260, 'health': 1050, 'attack_power': 30, 'defense': 16},
+    17: {'experience': 2490, 'health': 1100, 'attack_power': 32, 'defense': 17},
+    18: {'experience': 2730, 'health': 1150, 'attack_power': 33, 'defense': 18},
+    19: {'experience': 2980, 'health': 1200, 'attack_power': 35, 'defense': 19},
+    20: {'experience': 3240, 'health': 1250, 'attack_power': 36, 'defense': 20}
 }
 
 # Earn XP
@@ -65,7 +65,7 @@ def level_up():
         player_defense += requirements['defense']
         player_max_ap += 30
         player_ap = min(player_ap, player_max_ap)
-        print(f"You have gained enough experiences points to reach level {player_level}!\nYour attributes have increased and you've regained health!")
+        print(f"You have gained enough experience points to reach level {player_level}!\nYour attributes have increased and you've regained health!")
 # Select an enemy
 def select_enemy():
     return random.choice(enemies)
@@ -86,7 +86,7 @@ def spin_reels():
     return result
 # Process spins and reels
 def process_spin(result):  # sourcery skip: low-code-quality, use-fstring-for-concatenation
-    global charge_modifier, score, player_max_ap, player_ap, xp
+    global charge_modifier, score, player_max_ap, player_ap, enemy_max_health, xp
     for row in result:
         print("   ".join(row))
         time.sleep(0.3)
@@ -172,7 +172,7 @@ def process_spin(result):  # sourcery skip: low-code-quality, use-fstring-for-co
         player_status = f"{player_name}'s HP: {max(player_health, 0)}/{player_max_health}"
     player_ap_status = f"AP: {max(player_ap, 0)}/{player_max_ap}"
     player_xp_status = f"Level {player_level} ({xp}/{level_up_stats[player_level + 1]['experience']} XP)"
-    enemy_status = f"{enemy_name}'s HP: {max(enemy_health, 0)}/{enemy['health']}"
+    enemy_status = f"{enemy_name}'s HP: {max(enemy_health, 0)}/{enemy_max_health}"
     dungeon_rooms = f"Rooms explored: {defeated_enemy_count}"
     status_length = max(len(player_status), len(player_xp_status), len(enemy_status))
     print("\n╔" + "═" * status_length + "╗")
@@ -295,9 +295,10 @@ def enemy_attack_player(enemy_attacks):
 
 #! Program init
 def start_game():  # sourcery skip: extract-method, low-code-quality
-    global player_name, enemy, enemy_name, enemy_health, enemy_attack_power, enemy_defense, enemy_xp, player_max_health, player_health, player_attack_power, player_defense, player_armor, player_level, player_max_ap, player_ap, xp, defeated_enemy_count, defeated_enemy, charge_modifier, score
+    global player_name, enemy, enemy_name, enemy_max_health, enemy_health, enemy_attack_power, enemy_defense, enemy_xp, player_max_health, player_health, player_attack_power, player_defense, player_armor, player_level, player_max_ap, player_ap, xp, defeated_enemy_count, defeated_enemy, charge_modifier, score
     enemy = select_enemy()
     enemy_name = enemy['name']
+    enemy_max_health = enemy['health']
     enemy_health = enemy['health']
     enemy_attack_power = enemy['attack_power']
     enemy_defense = enemy['defense']
@@ -377,6 +378,7 @@ def start_game():  # sourcery skip: extract-method, low-code-quality
             enemy = select_enemy() if defeated_enemy_count % 8 != 0 else select_boss()
             enemy_name = enemy['name']
             if player_level > 1:
+                enemy_max_health = round(enemy['health'] * (player_level * 0.55))
                 enemy_health = round(enemy['health'] * (player_level * 0.55))
                 enemy_attack_power = round(enemy['attack_power'] * (player_level * 0.58))
                 enemy_defense = round(enemy['defense'] * (player_level * 0.58))
