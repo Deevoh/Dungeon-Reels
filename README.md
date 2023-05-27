@@ -5,9 +5,8 @@ Another personal project of mine. Thought that making a hybrid RPG and slot mach
 
 ## **To Do**
 
-- Scale armor and health buffs with player level.
-- Scale enemies with player level.
-- Implement a regenerative point system to use the charge ability.
+- Fix bug with displaying the wrong enemy max HP.
+- Improve player/enemy status readability.
 - Add option to rest after battle or choose from other options.
 - Add in dungeon levels, and a chance for bosses after a certain amount of enemies defeated.
 - Add a chance for random events.
