@@ -6,6 +6,7 @@ Another personal project of mine. Thought that making a hybrid RPG and slot mach
 ## **To Do**
 
 - Fix bug with displaying the wrong enemy max HP.
+- Improve player/enemy status readability.
 - Add option to rest after battle or choose from other options.
 - Add in dungeon levels, and a chance for bosses after a certain amount of enemies defeated.
 - Add a chance for random events.
