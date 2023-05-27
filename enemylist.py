@@ -229,5 +229,107 @@ enemies = [
         'attack_power': 23,
         'defense': 7,
         'xp': 46
+    },
+    {
+        'name': 'Goblin Archer',
+        'health': 35,
+        'attack_power': 12,
+        'defense': 1,
+        'xp': 10
+    },
+    {
+        'name': 'Zombie',
+        'health': 45,
+        'attack_power': 14,
+        'defense': 2,
+        'xp': 15
+    },
+    {
+        'name': 'Sorcerer',
+        'health': 55,
+        'attack_power': 18,
+        'defense': 3,
+        'xp': 22
+    },
+    {
+        'name': 'Cyclops',
+        'health': 75,
+        'attack_power': 23,
+        'defense': 7,
+        'xp': 40
+    },
+    {
+        'name': 'Nymph',
+        'health': 40,
+        'attack_power': 14,
+        'defense': 3,
+        'xp': 12
+    },
+    {
+        'name': 'Ghost',
+        'health': 50,
+        'attack_power': 16,
+        'defense': 4,
+        'xp': 18
+    },
+    {
+        'name': 'Dwarf',
+        'health': 60,
+        'attack_power': 18,
+        'defense': 5,
+        'xp': 24
+    },
+    {
+        'name': 'Djinn',
+        'health': 65,
+        'attack_power': 17,
+        'defense': 5,
+        'xp': 26
+    },
+    {
+        'name': 'Wight',
+        'health': 55,
+        'attack_power': 15,
+        'defense': 4,
+        'xp': 22
+    },
+    {
+        'name': 'Griffon',
+        'health': 80,
+        'attack_power': 21,
+        'defense': 6,
+        'xp': 38
     }
 ]
+
+bosses = [
+    {
+        'name': 'Frost King',
+        'health': 120,
+        'attack_power': 21,
+        'defense': 9,
+        'xp': 96
+    },
+    {
+        'name': 'Shadow Queen',
+        'health': 137,
+        'attack_power': 26,
+        'defense': 10,
+        'xp': 108
+    },
+    {
+        'name': 'Inferno Dragon',
+        'health': 157,
+        'attack_power': 30,
+        'defense': 11,
+        'xp': 114
+    },
+    {
+        'name': 'Colossus',
+        'health': 175,
+        'attack_power': 34,
+        'defense': 12,
+        'xp': 128
+    }
+]
+
