@@ -104,9 +104,9 @@ def process_spin(result):  # sourcery skip: low-code-quality, use-fstring-for-co
     print("━═━═━═━═━═━═")
     time.sleep(0.5)
     if charge_modifier > 1:
-        print("\n─⊳ Charge active!")
-    if defeated_enemy_count % 10:
-        print("\nBoss battle!")
+        print("\n◇ Charge active!")
+    if defeated_enemy_count % 10 == 0 and defeated_enemy_count > 1:
+        print("\n◆ Boss battle")
     # Count all the matches
     if escape_matches > 0:
         score += (escape_matches * 25) + 25
@@ -237,7 +237,7 @@ def attack_enemy(sword_matches):
 def enemy_attack_player_crit(enemy_critical_attacks):
     global enemy_attack_power, player_health, player_armor, player_defense, charge_modifier
     damage = max(enemy_attack_power - player_defense, 0)
-    total_damage = round(damage * enemy_critical_attacks * charge_modifier * 1.5)
+    total_damage = round(damage * enemy_critical_attacks * charge_modifier * 1.38)
     print(f"\nThe {enemy_name.lower()} initiates a critical attack from matching 3 💀 symbols in a row.")
     if player_armor > 0:
         armor_reduction = min(player_armor, total_damage)
@@ -247,7 +247,7 @@ def enemy_attack_player_crit(enemy_critical_attacks):
             print(f"The {enemy_name.lower()} attacks {player_name} and deals {total_damage} damage after armor absorption.")
         elif enemy_critical_attacks > 1:
             print(f"The {enemy_name.lower()} attacks {player_name} {enemy_critical_attacks} times and deals {total_damage} damage after armor absorption.")
-        print(f"Your armor absorbed {armor_reduction} damage.")
+        print(f"{player_name}'s armor absorbed {armor_reduction} damage.")
     elif enemy_critical_attacks == 1:
         print(f"The {enemy_name.lower()} attacks {player_name} and deals {total_damage} damage.")
     elif enemy_critical_attacks > 1:
@@ -267,7 +267,7 @@ def enemy_attack_player(enemy_attacks):
             print(f"The {enemy_name.lower()} attacks {player_name} and deals {total_damage} damage after armor absorption.")
         elif enemy_attacks > 1:
             print(f"The {enemy_name.lower()} attacks {player_name} {enemy_attacks} times and deals {total_damage} damage after armor absorption.")
-        print(f"Your armor absorbed {armor_reduction} damage.")
+        print(f"{player_name}'s armor absorbed {armor_reduction} damage.")
     elif enemy_attacks == 1:
         print(f"The {enemy_name.lower()} attacks {player_name} and deals {total_damage} damage.")
     elif enemy_attacks > 1:
@@ -342,7 +342,7 @@ def start_game():  # sourcery skip: extract-method, low-code-quality
             print(f"\nGame Over! {player_name} was killed by the {enemy_name.lower()}.")
             break
         elif enemy_health <= 0:
-            if defeated_enemy_count % 10:
+            if defeated_enemy_count % 10 == 0 and defeated_enemy_count > 1:
                 boss_count += 1
             defeated_enemy_count += 1
             print(f"\nCongratulations! You've defeated the {enemy_name.lower()} and gained {enemy_xp} XP!")
@@ -362,8 +362,8 @@ def start_game():  # sourcery skip: extract-method, low-code-quality
             enemy = select_enemy() if defeated_enemy_count % 10 != 0 else select_boss()
             enemy_name = enemy['name']
             if player_level > 1:
-                enemy_max_health = round(enemy['health'] * (player_level * 0.55))
-                enemy_health = round(enemy['health'] * (player_level * 0.55))
+                enemy_max_health = round(enemy['health'] * (player_level * 0.54))
+                enemy_health = round(enemy['health'] * (player_level * 0.54))
                 enemy_attack_power = round(enemy['attack_power'] * (player_level * 0.58))
                 enemy_defense = round(enemy['defense'] * (player_level * 0.55))
                 enemy_xp = round(enemy['xp'] * (player_level * 0.55))
@@ -412,9 +412,9 @@ def start_game():  # sourcery skip: extract-method, low-code-quality
     else:
         print(f"\nYou have defeated {defeated_enemy_count} enemies.")
     if boss_count == 1:
-        print("\nYou have defeated 1 boss.")
+        print("You have defeated 1 boss.")
     else:
-        print(f"\nYou have defeated {boss_count} bosses.")
+        print(f"You have defeated {boss_count} bosses.")
     print(f"You have gained a total of {xp} XP.")
     print(f"Your final score is {score}.")
     while True:

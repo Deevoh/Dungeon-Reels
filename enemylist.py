@@ -313,21 +313,21 @@ bosses = [
     {
         'name': 'Shadow Queen',
         'health': 137,
-        'attack_power': 26,
+        'attack_power': 24,
         'defense': 10,
         'xp': 108
     },
     {
         'name': 'Inferno Dragon',
         'health': 157,
-        'attack_power': 30,
+        'attack_power': 28,
         'defense': 11,
         'xp': 114
     },
     {
         'name': 'Colossus',
-        'health': 175,
-        'attack_power': 34,
+        'health': 168,
+        'attack_power': 32,
         'defense': 12,
         'xp': 128
     }
