@@ -2,34 +2,13 @@ import random
 import os
 import time
 from art import logo
-from tables import level_up_stats
+from tables import symbols, player, level_up_stats
 from enemylist import enemies, bosses
-
-
-symbols = {
-    'armor': '🛡️ ',
-    'sword': '🗡️ ',
-    'heart': '❤️ ',
-    'skill': '➕',
-    'escape': '🏃',
-    'enemy': '💀'
-}
-
-player = {
-    'level': 1,
-    'xp': 0,
-    'max_health': 300,
-    'health': 300,
-    'attack_power': 14,
-    'defense': 5,
-    'armor': 0,
-    'ap': 100
-}
 
 # Earn XP
 def earn_experience(enemy_xp):
-    global xp, player_level
-    xp += enemy_xp
+    global xp, player_level, escaped_combat
+    xp += round(enemy_xp / 2) if escaped_combat else enemy_xp
     while (player_level + 1) in level_up_stats and xp >= level_up_stats[player_level + 1]['experience']:
         level_up()
 # Process level up
@@ -154,7 +133,7 @@ def process_spin(result):  # sourcery skip: low-code-quality, use-fstring-for-co
     player_ap_status = f"AP: {max(player_ap, 0)}/{player_max_ap}"
     player_xp_status = f"Level {player_level} ({xp}/{level_up_stats[player_level + 1]['experience']} XP)"
     enemy_status = f"{enemy_name}'s HP: {max(enemy_health, 0)}/{enemy_max_health}"
-    dungeon_rooms = f"Rooms explored: {defeated_enemy_count}"
+    dungeon_rooms = f"Rooms explored: {defeated_enemy_count}" #TODO Change this to room_count?
     status_length = max(len(player_status), len(player_ap_status), len(player_xp_status), len(enemy_status))
     print("\n╔" + "═" * status_length + "╗")
     print("║" + player_status.center(status_length) + "║")
@@ -166,10 +145,10 @@ def process_spin(result):  # sourcery skip: low-code-quality, use-fstring-for-co
     print(" " + dungeon_rooms.center(status_length))
 # Escape
 def escape_combat():
-    global enemy_health
+    global escaped_combat
     print(f"\n{player_name} triggers an escape by matching 3 🏃 symbols in a column.")
     print(f"{player_name} successfully runs from the {enemy_name.lower()}.")
-    enemy_health = 0
+    escaped_combat = True
 # Armor buff
 def add_armor(armor_matches):
     global player_armor, charge_modifier
@@ -276,7 +255,7 @@ def enemy_attack_player(enemy_attacks):
 
 #! Program init
 def start_game():  # sourcery skip: extract-method, low-code-quality
-    global player_name, enemy, enemy_name, enemy_max_health, enemy_health, enemy_attack_power, enemy_defense, enemy_xp, player_max_health, player_health, player_attack_power, player_defense, player_armor, player_level, player_max_ap, player_ap, xp, defeated_enemy_count, defeated_enemy, charge_modifier, score
+    global player_name, enemy, enemy_name, enemy_max_health, enemy_health, enemy_attack_power, enemy_defense, enemy_xp, player_max_health, player_health, player_attack_power, player_defense, player_armor, player_level, player_max_ap, player_ap, xp, defeated_enemy_count, defeated_enemy, charge_modifier, score, escaped_combat
     enemy = select_enemy()
     enemy_name = enemy['name']
     enemy_max_health = enemy['health']
@@ -297,6 +276,7 @@ def start_game():  # sourcery skip: extract-method, low-code-quality
     defeated_enemy = False
     charge_modifier = 1
     score = 0
+    escaped_combat = False
     boss_count = 0
     game_over = False
     early_flee = False
@@ -336,7 +316,40 @@ def start_game():  # sourcery skip: extract-method, low-code-quality
         time.sleep(0.3)
         process_spin(spin_result)
         # Game over and combat resolutions
-        if player_health <= 0:
+        if escaped_combat:
+            if defeated_enemy_count % 10 == 0 and defeated_enemy_count > 1:
+                boss_count += 1
+            defeated_enemy_count += 1
+            print(f"\nYou have gained {round(enemy_xp / 2)} XP.")
+            earn_experience(enemy_xp)
+            # Post escape new round input loop
+            while not game_over:
+                choice = input("\nKeep exploring the dungeon? (y/n): ")
+                if choice.lower() == 'n':
+                    game_over = True
+                    break
+                elif choice.lower() == 'y':
+                    escaped_combat = False
+                    break
+                else:
+                    continue
+            # New round setup and boss check
+            enemy = select_enemy() if defeated_enemy_count % 10 != 0 else select_boss()
+            enemy_name = enemy['name']
+            if player_level > 1:
+                enemy_max_health = round(enemy['health'] * (player_level * 0.58))
+                enemy_health = round(enemy['health'] * (player_level * 0.58))
+                enemy_attack_power = round(enemy['attack_power'] * (player_level * 0.58))
+                enemy_defense = round(enemy['defense'] * (player_level * 0.55))
+                enemy_xp = round(enemy['xp'] * (player_level * 0.52))
+            else:
+                enemy_max_health = enemy['health']
+                enemy_health = enemy['health']
+                enemy_attack_power = enemy['attack_power']
+                enemy_defense = enemy['defense']
+                enemy_xp = enemy['xp']
+            continue
+        elif player_health <= 0:
             game_over = True
             player_died = True
             print(f"\nGame Over! {player_name} was killed by the {enemy_name.lower()}.")
@@ -362,11 +375,11 @@ def start_game():  # sourcery skip: extract-method, low-code-quality
             enemy = select_enemy() if defeated_enemy_count % 10 != 0 else select_boss()
             enemy_name = enemy['name']
             if player_level > 1:
-                enemy_max_health = round(enemy['health'] * (player_level * 0.54))
-                enemy_health = round(enemy['health'] * (player_level * 0.54))
-                enemy_attack_power = round(enemy['attack_power'] * (player_level * 0.58))
+                enemy_max_health = round(enemy['health'] * (player_level * 0.58))
+                enemy_health = round(enemy['health'] * (player_level * 0.58))
+                enemy_attack_power = round(enemy['attack_power'] * (player_level * 0.56))
                 enemy_defense = round(enemy['defense'] * (player_level * 0.55))
-                enemy_xp = round(enemy['xp'] * (player_level * 0.55))
+                enemy_xp = round(enemy['xp'] * (player_level * 0.52))
             else:
                 enemy_max_health = enemy['health']
                 enemy_health = enemy['health']

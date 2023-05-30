@@ -312,24 +312,65 @@ bosses = [
     },
     {
         'name': 'Shadow Queen',
-        'health': 137,
+        'health': 138,
         'attack_power': 24,
-        'defense': 10,
+        'defense': 8,
         'xp': 108
     },
     {
         'name': 'Inferno Dragon',
-        'health': 157,
-        'attack_power': 28,
-        'defense': 11,
+        'health': 150,
+        'attack_power': 26,
+        'defense': 9,
         'xp': 114
     },
     {
         'name': 'Colossus',
-        'health': 168,
-        'attack_power': 32,
+        'health': 160,
+        'attack_power': 30,
+        'defense': 11,
+        'xp': 126
+    },
+    {
+        'name': 'Goblin King',
+        'health': 110,
+        'attack_power': 18,
+        'defense': 7,
+        'xp': 75
+    },
+    {
+        'name': 'Forest Sprite',
+        'health': 95,
+        'attack_power': 16,
+        'defense': 6,
+        'xp': 75
+    },
+    {
+        'name': 'Crystal Golem',
+        'health': 100,
+        'attack_power': 17,
+        'defense': 7,
+        'xp': 80
+    },
+    {
+        'name': 'Flame Serpent',
+        'health': 114,
+        'attack_power': 18,
+        'defense': 9,
+        'xp': 90
+    },
+    {
+        'name': 'Storm Witch',
+        'health': 142,
+        'attack_power': 24,
+        'defense': 10,
+        'xp': 116
+    },
+    {
+        'name': 'Ancient Dragon',
+        'health': 180,
+        'attack_power': 28,
         'defense': 12,
-        'xp': 128
+        'xp': 130
     }
 ]
-
